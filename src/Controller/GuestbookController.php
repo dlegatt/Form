@@ -11,7 +11,6 @@ class GuestbookController
 {
     public function index(Application $app)
     {
-        $repo = new Guestbook($app['db']);
-        return new JsonResponse($repo->findAll());
+        return new JsonResponse($app['repo.guestbook']->findAll());
     }
 }

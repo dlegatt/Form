@@ -20,4 +20,9 @@ $app->register(new \Silex\Provider\DoctrineServiceProvider(), [
     ]
 ]);
 
+// Service config
+$app['repo.guestbook'] = function ($app) {
+    return new \App\Repository\Guestbook($app['db']);
+};
+
 return $app;
