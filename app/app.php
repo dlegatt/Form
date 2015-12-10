@@ -9,13 +9,14 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
+$app->register(new \Silex\Provider\ValidatorServiceProvider());
 $app->register(new \Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
        'driver'    => 'pdo_mysql',
        'host'      => '127.0.0.1',
-       'dbname'    => 'spa_backend',
+       'dbname'    => 'tacobell',
        'user'      => 'root',
-       'password'  => 'NcbpT35t3d',
+       'password'  => '',
        'charset'   => 'utf8'
     ]
 ]);

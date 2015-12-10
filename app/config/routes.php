@@ -3,4 +3,4 @@
 
 use App\Provider\GuestbookControllerProvider;
 
-$app->mount('/', new GuestbookControllerProvider());
+$app->mount('/gb', new GuestbookControllerProvider());
