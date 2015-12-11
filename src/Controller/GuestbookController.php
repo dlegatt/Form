@@ -3,7 +3,6 @@
 
 namespace App\Controller;
 
-use App\Repository\Guestbook;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,23 +18,9 @@ class GuestbookController
     public function newEntry(Request $request, Application $app)
     {
         $req = json_decode($request->getContent(), true);
-        $constraint = new Assert\Collection(
-            [
-                'first_name' => new Assert\NotBlank(),
-                'last_name' => new Assert\NotBlank(),
-                'email' => [
-                    new Assert\NotBlank(),
-                    new Assert\Email()
-                ]
-            ]
-        );
-        $errors = $app['validator']->validateValue($req, $constraint);
-        if (count($errors) > 0) {
-            $msg = [];
-            foreach ($errors as $error) {
-                $msg[] = $error->getPropertyPath().' '.$error->getMessage();
-            }
-            return new JsonResponse(['guestbook' => $req, 'errors' => $msg]);
+        $valid = $app['validate.guestbook']->isValid($req);
+        if ($valid !== true) {
+            return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()]);
         } else {
             $guestbook = $app['repo.guestbook']->saveNew($req);
             return new JsonResponse($guestbook);
@@ -63,25 +48,11 @@ class GuestbookController
 
     public function update(Application $app, Request $request, $id)
     {
-        if ($app['repo.guestbook']->find($id)) {
+        if ($old = $app['repo.guestbook']->find($id)) {
             $req = json_decode($request->getContent(), true);
-            $constraint = new Assert\Collection(
-                [
-                    'first_name' => new Assert\NotBlank(),
-                    'last_name' => new Assert\NotBlank(),
-                    'email' => [
-                        new Assert\NotBlank(),
-                        new Assert\Email()
-                    ]
-                ]
-            );
-            $errors = $app['validator']->validateValue($req, $constraint);
-            if (count($errors) > 0) {
-                $msg = [];
-                foreach ($errors as $error) {
-                    $msg[] = $error->getPropertyPath().' '.$error->getMessage();
-                }
-                return new JsonResponse(['guestbook' => $req, 'errors' => $msg]);
+            $valid = $app['validate.guestbook']->isValid($req, $id);
+            if ($valid !== true) {
+                return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()]);
             } else {
                 $guestbook = $app['repo.guestbook']->update($id, $req);
                 return new JsonResponse($guestbook);

@@ -1,4 +1,5 @@
 <?php
+
 # ./web/index.php
 // stops errors from displaying
 ini_set('display_errors', 0);
