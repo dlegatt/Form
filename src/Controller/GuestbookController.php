@@ -17,7 +17,9 @@ class GuestbookController
 
     public function newEntry(Request $request, Application $app)
     {
-        $req = json_decode($request->getContent(), true);
+        $req = json_decode($request->getContent() !== '' ? $request->getContent() : '{}', true);
+        $req = $req !== null ? $req : [];
+
         $valid = $app['validate.guestbook']->isValid($req);
         if ($valid !== true) {
             return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()],400);
@@ -50,9 +52,10 @@ class GuestbookController
     {
         if ($old = $app['repo.guestbook']->find($id)) {
             $req = json_decode($request->getContent(), true);
+            unset($req['id']);
             $valid = $app['validate.guestbook']->isValid($req, $id);
             if ($valid !== true) {
-                return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()]);
+                return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()], 400);
             } else {
                 $guestbook = $app['repo.guestbook']->update($id, $req);
                 return new JsonResponse($guestbook);

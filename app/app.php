@@ -14,9 +14,9 @@ $app->register(new \Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
        'driver'    => 'pdo_mysql',
        'host'      => '127.0.0.1',
-       'dbname'    => 'tacobell',
+       'dbname'    => 'spa_backend',
        'user'      => 'root',
-       'password'  => '',
+       'password'  => 'NcbpT35t3d',
        'charset'   => 'utf8'
     ]
 ]);
