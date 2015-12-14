@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Validation\Builder;
+namespace App\Validation\ConstraintBuilder;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validation\Constraint as Constraint;
@@ -11,9 +11,16 @@ class Guestbook
     {
         return new Assert\Collection(
             [
-                'first_name' => new Assert\NotBlank(),
-                'last_name' => new Assert\NotBlank(),
+                'first_name' => [
+                    new Assert\NotBlank(),
+                    new Assert\NotNull,
+                ],
+                'last_name' => [
+                    new Assert\NotBlank(),
+                    new Assert\NotNull(),
+                ],
                 'email' => [
+                    new Assert\NotNull(),
                     new Assert\NotBlank(),
                     new Assert\Email(),
                 ]

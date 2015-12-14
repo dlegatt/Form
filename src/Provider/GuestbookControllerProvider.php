@@ -12,11 +12,11 @@ class GuestbookControllerProvider implements ControllerProviderInterface
     {
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/', 'App\Controller\GuestbookController::index');
-        $controllers->post('/new', 'App\Controller\GuestbookController::newEntry');
-        $controllers->get('/show/{id}', 'App\Controller\GuestbookController::show');
-        $controllers->put('/update/{id}', 'App\Controller\GuestbookController::update');
-        $controllers->delete('/delete/{id}', 'App\Controller\GuestbookController::delete');
+        $controllers->get('/gb', 'App\Controller\GuestbookController::index');
+        $controllers->match('/gb', 'App\Controller\GuestbookController::newEntry')->method("POST|OPTIONS");
+        $controllers->get('/gb/{id}', 'App\Controller\GuestbookController::show');
+        $controllers->put('/gb/{id}', 'App\Controller\GuestbookController::update');
+        $controllers->delete('/gb/{id}', 'App\Controller\GuestbookController::delete');
 
         return $controllers;
     }

@@ -14,9 +14,9 @@ $app->register(new \Silex\Provider\DoctrineServiceProvider(), [
     'db.options' => [
        'driver'    => 'pdo_mysql',
        'host'      => '127.0.0.1',
-       'dbname'    => 'spa_backend',
+       'dbname'    => 'tacobell',
        'user'      => 'root',
-       'password'  => 'NcbpT35t3d',
+       'password'  => '',
        'charset'   => 'utf8'
     ]
 ]);
@@ -27,7 +27,7 @@ $app['repo.guestbook'] = function ($app) {
 };
 
 $app['validate.guestbook'] = $app->share(function ($app) {
-    return new \App\Validation\Guestbook($app, \App\Validation\Builder\Guestbook::constraints());
+    return new \App\Validation\Guestbook($app, \App\Validation\ConstraintBuilder\Guestbook::constraints());
 });
 
 return $app;

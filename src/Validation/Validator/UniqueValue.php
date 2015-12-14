@@ -14,13 +14,15 @@ class UniqueValue extends ConstraintValidator
         $query = $qb->select('id')->from($constraint->table)
             ->where($constraint->field.' = ?')
             ->setParameter($constraint->field,$value);
+        $params = [$value];
 
         if ($constraint->id !== null) {
             $query->andWhere('id != ?')
                 ->setParameter('id', $constraint->id);
+            $params[] = $constraint->id;
         }
 
-        $result = $constraint->dbal->fetchAssoc($query->getSQL(),[$value, $constraint->id]);
+        $result = $constraint->dbal->fetchAssoc($query->getSQL(),$params);
 
 
         if (is_array($result) && count($result) > 0) {

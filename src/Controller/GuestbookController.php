@@ -20,7 +20,7 @@ class GuestbookController
         $req = json_decode($request->getContent(), true);
         $valid = $app['validate.guestbook']->isValid($req);
         if ($valid !== true) {
-            return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()]);
+            return new JsonResponse(['guestbook' => $req, 'errors' => $app['validate.guestbook']->getMessages()],400);
         } else {
             $guestbook = $app['repo.guestbook']->saveNew($req);
             return new JsonResponse($guestbook);

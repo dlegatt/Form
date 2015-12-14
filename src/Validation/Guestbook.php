@@ -59,7 +59,7 @@ class Guestbook
                     'field' => trim(
                         $error->getPropertyPath(), '[]'
                     ),
-                    'mesasge' => $error->getMessage(),
+                    'message' => $error->getMessage(),
                 ];
             }
             return false;
