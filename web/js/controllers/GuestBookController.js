@@ -4,14 +4,16 @@ gbApp.controller('GuestBookController',
     function GuestBookController($scope, guestBookData) {
         $scope.entry = {};
         $scope.errors = {};
-        $scope.entries = guestBookData.getAllEnties();
+        $scope.deleted = null;
+        $scope.entries = guestBookData.getAllEntries();
+        $scope.refreshTable = function () {
+            $scope.entries = guestBookData.getAllEntries();
+        };
         $scope.editEntry = function (entry) {
             $scope.editing = JSON.parse(JSON.stringify(entry));
-            console.log($scope.editing);
         };
         $scope.cancelEdit = function (entry) {
             var idx = $scope.entries.indexOf(entry);
-            console.log($scope.editing);
             $scope.entries[idx] = $scope.editing;
             $scope.editing = '';
             $scope.editErrors = {};
@@ -22,28 +24,24 @@ gbApp.controller('GuestBookController',
                 .$promise.then(
                 function (response){
                     $scope.editing = null;
-                    console.log(response);
+                    $scope.refreshTable;
                 },
                 function (response) {
-                    console.log('failure', response);
                     if (response.data !== null) {
                         for (var error in response.data.errors) {
                             $scope.editErrors[response.data.errors[error].field] =
                                 response.data.errors[error].message;
                         }
-                        console.log($scope.editErrors);
                     }
                 }
             )
         };
         $scope.sign = function (entry) {
-            console.log(entry);
             $scope.errors = {};
             guestBookData.newEntry(entry)
                 .$promise.then(
                 function(response) {
-                    console.log('success', response);
-                    $scope.entries.push(response);
+                    $scope.refreshTable();
                     $scope.entry = null;
                 },
                 function(response) {
@@ -53,17 +51,27 @@ gbApp.controller('GuestBookController',
                             $scope.errors[response.data.errors[error].field] =
                                 response.data.errors[error].message;
                         }
-                        console.log($scope.errors);
                     }
                 }
             )
         };
         $scope.delete = function(entry) {
-            guestBookData.deleteEntry(entry.id);
-            var index = $scope.entries.indexOf(entry);
-            if (index > -1) {
-                $scope.entries.splice(index,1);
-            }
+            guestBookData.deleteEntry(entry.id)
+                .$promise.then(
+                function (response) {
+                    $scope.deleted = response;
+                    $scope.refreshTable();
+                }
+            );
+        };
+        $scope.undoDelete = function() {
+            var undo = {
+                first_name: $scope.deleted.first_name,
+                last_name: $scope.deleted.last_name,
+                email: $scope.deleted.email
+            };
+            $scope.sign(undo);
+            $scope.deleted = null;
         }
     }
 );

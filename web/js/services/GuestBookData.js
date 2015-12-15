@@ -1,7 +1,7 @@
 'use strict';
 
 gbApp.factory('guestBookData', function ($resource, $http){
-    var rsc = $resource('/api/gb/:id', {id: '@id'},
+    var rsc = $resource('/web/index.php/api/gb/:id', {id: '@id'},
         {
             update: {
                 method: 'PUT'
@@ -13,7 +13,7 @@ gbApp.factory('guestBookData', function ($resource, $http){
         getEntry: function (entryId) {
             return rsc.get({id:entryId});
         },
-        getAllEnties: function () {
+        getAllEntries: function () {
             return rsc.query()
         },
         newEntry: function (entry) {

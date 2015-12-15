@@ -73,6 +73,11 @@
     <div class="row">
         <h1>Guest Book Entries</h1>
         <hr>
+        <div class="alert alert-success alert-dismissible" role="alert" ng-show="deleted">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Record has been deleted: <strong>{{deleted.first_name}} {{deleted.last_name}}, {{deleted.email}}</strong><br>
+            <button class="btn btn-primary" ng-click="undoDelete()">Wait, bring it back!</button>
+        </div>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
